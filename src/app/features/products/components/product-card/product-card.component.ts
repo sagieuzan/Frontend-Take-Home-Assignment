@@ -7,24 +7,7 @@ import { Product } from '../../models/product.model';
   selector: 'app-product-card',
   standalone: true,
   imports: [RouterLink, CurrencyPipe, NgIf],
-  template: `
-    <div class="product-card card" [routerLink]="['/products', product.id]">
-      <div class="product-image">
-        <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'" [alt]="product.name">
-        <span class="category-badge">{{ product.category }}</span>
-      </div>
-      <div class="product-info">
-        <h3 class="product-name">{{ product.name }}</h3>
-        <p class="product-description">{{ product.description }}</p>
-        <div class="product-footer">
-          <span class="product-price">{{ product.price | currency }}</span>
-          <span class="product-stock" [class.out-of-stock]="product.stock === 0">
-            {{ product.stock > 0 ? product.stock + ' in stock' : 'Out of stock' }}
-          </span>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss'
 })
 export class ProductCardComponent {

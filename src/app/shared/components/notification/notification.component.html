@@ -1,0 +1,7 @@
+<div class="notification-container">
+    @for (n of notificationService.notifications(); track n) {
+    <div class="notification" [class]="n.type">
+        <span>{{ n.message }}</span>
+    </div>
+    }
+</div>

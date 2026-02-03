@@ -19,41 +19,7 @@ import { ProductFilters } from '../../models/product.model';
     EmptyStateComponent,
     ErrorMessageComponent
   ],
-  template: `
-    <div class="container fade-in">
-      <div class="list-header">
-        <div>
-          <h1>Products</h1>
-          <p class="subtitle">Manage and browse your catalog</p>
-        </div>
-        <div class="stats" *ngIf="!productService.loading()">
-           {{ productService.productCount() }} products found
-        </div>
-      </div>
-
-      <app-product-filters (filtersChanged)="onFiltersChanged($event)"></app-product-filters>
-
-      <app-loading-spinner *ngIf="productService.loading()"></app-loading-spinner>
-
-      <app-error-message 
-        *ngIf="productService.error() && !productService.loading()" 
-        [message]="productService.error()!"
-        (retry)="loadProducts()">
-      </app-error-message>
-
-      <ng-container *ngIf="!productService.loading() && !productService.error()">
-        <div class="product-grid" *ngIf="productService.products().length > 0; else empty">
-          @for (product of productService.products(); track product.id) {
-            <app-product-card [product]="product"></app-product-card>
-          }
-        </div>
-      </ng-container>
-
-      <ng-template #empty>
-        <app-empty-state></app-empty-state>
-      </ng-template>
-    </div>
-  `,
+  templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
 export class ProductListComponent implements OnInit {

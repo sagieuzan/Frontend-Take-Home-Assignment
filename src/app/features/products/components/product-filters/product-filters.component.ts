@@ -7,44 +7,7 @@ import { ProductFilters, ProductCategory } from '../../models/product.model';
   selector: 'app-product-filters',
   standalone: true,
   imports: [ReactiveFormsModule],
-  template: `
-    <div class="filters-card card">
-      <form [formGroup]="filterForm" class="filter-form">
-        <div class="form-group search">
-          <label for="search">Search</label>
-          <input type="text" id="search" formControlName="search" placeholder="Search products...">
-        </div>
-        
-        <div class="form-group">
-          <label for="category">Category</label>
-          <select id="category" formControlName="category">
-            <option value="">All Categories</option>
-            @for (cat of categories; track cat) {
-              <option [value]="cat">{{ cat }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="sortBy">Sort By</label>
-          <select id="sortBy" formControlName="sortBy">
-            <option value="name">Name</option>
-            <option value="price">Price</option>
-            <option value="createdAt">Newest</option>
-            <option value="stock">Stock</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="sortOrder">Order</label>
-          <select id="sortOrder" formControlName="sortOrder">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </div>
-      </form>
-    </div>
-  `,
+  templateUrl: './product-filters.component.html',
   styleUrl: './product-filters.component.scss'
 })
 export class ProductFiltersComponent implements OnInit, OnDestroy {

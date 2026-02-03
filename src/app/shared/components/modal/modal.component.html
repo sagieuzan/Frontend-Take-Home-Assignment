@@ -1,0 +1,22 @@
+@if (modalService.isOpen()) {
+<div class="modal-backdrop" (click)="modalService.cancel()">
+    <div class="modal-content" [class]="'type-' + (modalService.options()?.type || 'default')"
+        (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>{{ modalService.options()?.title }}</h2>
+        </div>
+        <div class="modal-body">
+            <p>{{ modalService.options()?.message }}</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" (click)="modalService.cancel()">
+                {{ modalService.options()?.cancelText || 'Cancel' }}
+            </button>
+            <button [class]="modalService.options()?.type === 'danger' ? 'btn-danger' : 'btn-primary'"
+                (click)="modalService.confirm()">
+                {{ modalService.options()?.confirmText || 'Confirm' }}
+            </button>
+        </div>
+    </div>
+</div>
+}

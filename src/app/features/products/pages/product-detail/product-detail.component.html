@@ -1,1 +1,64 @@
-<p>product-detail works!</p>
+<div class="container fade-in">
+    <div class="detail-header">
+        <button class="btn-back" (click)="goBack()">← Back</button>
+        <h1>{{ isEditMode ? 'Edit Product' : 'New Product' }}</h1>
+    </div>
+
+    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+    <div class="form-card card" *ngIf="!loading">
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="name">Product Name *</label>
+                    <input type="text" id="name" formControlName="name" placeholder="Enter product name">
+                    <div class="error" *ngIf="isFieldInvalid('name')">Name is required (min 3 chars)</div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="description">Description *</label>
+                    <textarea id="description" formControlName="description" rows="4"
+                        placeholder="Enter product description"></textarea>
+                    <div class="error" *ngIf="isFieldInvalid('description')">Description is required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price ($) *</label>
+                    <input type="number" id="price" formControlName="price" placeholder="0.00">
+                    <div class="error" *ngIf="isFieldInvalid('price')">Price must be greater than 0</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" formControlName="category">
+                        <option value="">Select Category</option>
+                        @for (cat of categories; track cat) {
+                        <option [value]="cat">{{ cat }}</option>
+                        }
+                    </select>
+                    <div class="error" *ngIf="isFieldInvalid('category')">Category is required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="stock">Stock Quantity *</label>
+                    <input type="number" id="stock" formControlName="stock" placeholder="0">
+                    <div class="error" *ngIf="isFieldInvalid('stock')">Stock cannot be negative</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUrl">Image URL</label>
+                    <input type="text" id="imageUrl" formControlName="imageUrl"
+                        placeholder="https://example.com/image.jpg">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" (click)="goBack()">Cancel</button>
+                <button type="button" class="btn-danger" *ngIf="isEditMode" (click)="onDelete()">Delete Product</button>
+                <button type="submit" class="btn-primary" [disabled]="saving">
+                    {{ saving ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

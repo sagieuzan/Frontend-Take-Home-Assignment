@@ -1,0 +1,67 @@
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal-content {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 450px;
+    overflow: hidden;
+    animation: modalScale 0.3s ease-out;
+}
+
+@keyframes modalScale {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+
+    h2 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+}
+
+.modal-body {
+    padding: 1.5rem;
+    color: var(--text-muted);
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    background: var(--background);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.type-danger .modal-header h2 {
+    color: var(--danger);
+}
+
+.type-success .modal-header h2 {
+    color: var(--success);
+}

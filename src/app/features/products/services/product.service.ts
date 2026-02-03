@@ -11,7 +11,7 @@ export class ProductService {
     private readonly http = inject(HttpClient);
     private readonly apiUrl = 'http://localhost:3000/products';
 
-    // Reactive State using Signals (Angular 17+)
+    // Reactive State 
     private readonly _products = signal<Product[]>([]);
     private readonly _loading = signal<boolean>(false);
     private readonly _error = signal<string | null>(null);
