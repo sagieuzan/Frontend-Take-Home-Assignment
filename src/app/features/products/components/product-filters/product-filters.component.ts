@@ -45,46 +45,7 @@ import { ProductFilters, ProductCategory } from '../../models/product.model';
       </form>
     </div>
   `,
-  styles: [`
-    .filters-card {
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .filter-form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      align-items: flex-end;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .form-group label {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-    .form-group input, .form-group select {
-      padding: 0.625rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 0.9375rem;
-      background: var(--surface);
-      color: var(--text);
-    }
-    .form-group input:focus, .form-group select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-    }
-    @media (max-width: 640px) {
-      .filter-form {
-        grid-template-columns: 1fr;
-      }
-    }
-  `]
+  styleUrl: './product-filters.component.scss'
 })
 export class ProductFiltersComponent implements OnInit, OnDestroy {
   @Output() filtersChanged = new EventEmitter<ProductFilters>();

@@ -1,0 +1,22 @@
+.error-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.error-card {
+    padding: 2rem;
+    border-color: var(--danger);
+    text-align: center;
+    max-width: 400px;
+}
+
+h3 {
+    color: var(--danger);
+    margin-bottom: 0.5rem;
+}
+
+p {
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+}
