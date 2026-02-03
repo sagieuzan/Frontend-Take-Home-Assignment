@@ -1,59 +1,68 @@
-# HomeAssignment
+# Product Management Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
+A modern Angular application for managing an e-commerce product catalog.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Product Listing**: View all products with real-time search, category filtering, and sorting.
+- **Product Management**: Create, edit, and delete products.
+- **Reactive Forms**: Robust form handling with real-time validation.
+- **State Management**: Built using Angular Signals for efficient, fine-grained reactivity.
+- **Responsive Design**: Premium look and feel with a custom CSS design system and dark mode support.
+- **User Feedback**: Clear loading states, empty states, and error handling.
 
-```bash
-ng serve
-```
+## Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Angular 19** (Standalone components, Signals, HttpClient)
+- **RxJS** (Reactive data streams, debounce search)
+- **JSON Server** (Mock API backend)
+- **Vanilla CSS** (Custom design system with variables)
 
-## Code scaffolding
+## Prerequisites
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js (v18+)
+- npm
 
-```bash
-ng generate component component-name
-```
+## Getting Started
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-ng generate --help
-```
+2. **Start the mock backend:**
+   ```bash
+   npx json-server --watch db.json --port 3000
+   ```
 
-## Building
+3. **Start the Angular application:**
+   ```bash
+   npm start
+   ```
+   The app will be available at `http://localhost:4200`.
 
-To build the project run:
+## Project Structure
 
-```bash
-ng build
-```
+- `src/app/core/`: Global services and configuration.
+- `src/app/shared/`: Reusable UI components (Spinner, EmptyState, Error).
+- `src/app/features/products/`: Main product management feature.
+  - `components/`: Feature-specific UI (ProductCard, Filters).
+  - `pages/`: Route-level components.
+  - `services/`: Product data access and state.
+  - `models/`: Type definitions and interfaces.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Running Tests
 
-## Running unit tests
+- **Run all tests:**
+  ```bash
+  npx ng test
+  ```
+- **Service Tests**: `product.service.spec.ts`
+- **Form Validation Tests**: `product-detail.component.spec.ts`
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Design Decisions
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Feature-Based Structure**: Organized by features for better scalability.
+- **Angular Signals**: Used instead of complex state management libraries for a native Angular experience.
+- **Tailored CSS**: Avoided frameworks like Tailwind to demonstrate strong Vanilla CSS skills and design consistency.
+- **Optimistic UI Styling**: Used CSS animations for smooth transitions.
