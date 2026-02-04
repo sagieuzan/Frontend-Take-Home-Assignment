@@ -1,16 +1,22 @@
-<div class="product-card card" [routerLink]="['/products', product.id]">
+<article class="product-card card" [routerLink]="product.isOptimistic ? null : ['/products', product.id]"
+    [class.is-optimistic]="product.isOptimistic" tabindex="0"
+    [attr.aria-label]="(product.isOptimistic ? '[Pending] ' : '') + 'View details for ' + product.name + ', price ' + (product.price | currency)">
     <div class="product-image">
-        <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'" [alt]="product.name">
+        <img [src]="product.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'"
+            [alt]="product.imageUrl ? 'Product image of ' + product.name : 'No image available for ' + product.name">
         <span class="category-badge">{{ product.category }}</span>
     </div>
     <div class="product-info">
-        <h3 class="product-name">{{ product.name }}</h3>
+        <header>
+            <h3 class="product-name">{{ product.name }}</h3>
+        </header>
         <p class="product-description">{{ product.description }}</p>
-        <div class="product-footer">
+        <footer class="product-footer">
             <span class="product-price">{{ product.price | currency }}</span>
-            <span class="product-stock" [class.out-of-stock]="product.stock === 0">
+            <span class="product-stock" [class.out-of-stock]="product.stock === 0"
+                [attr.aria-label]="product.stock > 0 ? product.stock + ' items in stock' : 'Out of stock'">
                 {{ product.stock > 0 ? product.stock + ' in stock' : 'Out of stock' }}
             </span>
-        </div>
+        </footer>
     </div>
-</div>
+</article>

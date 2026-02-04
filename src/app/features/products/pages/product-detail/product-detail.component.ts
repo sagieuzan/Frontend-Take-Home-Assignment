@@ -70,7 +70,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.productForm.invalid) {
+    if (this.productForm.invalid || (this.isEditMode && this.productForm.pristine)) {
       this.productForm.markAllAsTouched();
       return;
     }

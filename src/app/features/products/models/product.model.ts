@@ -3,13 +3,14 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: string;
-  imageUrl: string;
+  category: ProductCategory;
+  imageUrl?: string;
   stock: number;
-  rating: number;
+  rating?: number;
   tags: string[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+  isOptimistic?: boolean; // For Optimistic UI states
 }
 
 export type ProductCreate = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>;

@@ -58,7 +58,7 @@
       "stock": 0,
       "rating": 4.9,
       "createdAt": "2024-01-05T10:00:00Z",
-      "updatedAt": "2024-01-05T10:00:00Z"
+      "updatedAt": "2026-02-04T17:58:51.198Z"
     },
     {
       "id": "6",
@@ -187,10 +187,10 @@
       "price": 18.5,
       "category": "Home",
       "imageUrl": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80",
-      "stock": 25,
+      "stock": 26,
       "rating": 4.2,
       "createdAt": "2024-01-22T10:00:00Z",
-      "updatedAt": "2024-01-22T10:00:00Z"
+      "updatedAt": "2026-02-04T18:01:55.019Z"
     },
     {
       "id": "23",

@@ -1,13 +1,15 @@
-<div class="filters-card card">
+<div class="filters-card card" role="region" aria-label="Product filters">
     <form [formGroup]="filterForm" class="filter-form">
         <div class="form-group search">
-            <label for="search">Search</label>
-            <input type="text" id="search" formControlName="search" placeholder="Search products...">
+            <label for="search">Search Products</label>
+            <input type="text" id="search" formControlName="search" placeholder="Search by name or description..."
+                aria-describedby="search-hint">
+            <span id="search-hint" class="sr-only">Type to filter the product list automatically</span>
         </div>
 
         <div class="form-group">
             <label for="category">Category</label>
-            <select id="category" formControlName="category">
+            <select id="category" formControlName="category" aria-label="Filter by category">
                 <option value="">All Categories</option>
                 @for (cat of categories; track cat) {
                 <option [value]="cat">{{ cat }}</option>
@@ -17,7 +19,7 @@
 
         <div class="form-group">
             <label for="sortBy">Sort By</label>
-            <select id="sortBy" formControlName="sortBy">
+            <select id="sortBy" formControlName="sortBy" aria-label="Sort products by">
                 <option value="name">Name</option>
                 <option value="price">Price</option>
                 <option value="createdAt">Newest</option>
@@ -27,7 +29,7 @@
 
         <div class="form-group">
             <label for="sortOrder">Order</label>
-            <select id="sortOrder" formControlName="sortOrder">
+            <select id="sortOrder" formControlName="sortOrder" aria-label="Sort order">
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
             </select>
@@ -35,7 +37,8 @@
     </form>
 
     <div class="actions">
-        <button type="button" class="btn-reset" (click)="onReset()" title="Reset Filters">
+        <button type="button" class="btn-reset" (click)="onReset()" title="Reset Filters"
+            aria-label="Reset all search filters">
             Reset
         </button>
     </div>

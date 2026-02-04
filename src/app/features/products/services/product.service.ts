@@ -105,17 +105,28 @@ export class ProductService {
 
     createProduct(product: ProductCreate): Observable<Product> {
         this.clearCache();
-        const newProduct = {
+        const tempId = `temp-${Date.now()}`;
+        const optimisticProduct: Product = {
             ...product,
+            id: tempId,
+            isOptimistic: true,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
 
-        return this.http.post<Product>(this.apiUrl, newProduct).pipe(
+        // 1. Optimistic Update
+        this._products.update(prev => [optimisticProduct, ...prev]);
+
+        return this.http.post<Product>(this.apiUrl, product).pipe(
             tap(res => {
-                this._products.update(prev => [res, ...prev]);
+                // 2. Replace temp with real
+                this._products.update(prev =>
+                    prev.map(p => p.id === tempId ? { ...res, isOptimistic: false } : p)
+                );
             }),
             catchError(err => {
+                // 3. Rollback
+                this._products.update(prev => prev.filter(p => p.id !== tempId));
                 this._error.set('Failed to create product.');
                 return throwError(() => new Error('Failed to create product.'));
             })

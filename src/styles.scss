@@ -1,4 +1,7 @@
-html,
+html {
+  width: 100%;
+}
+
 body {
   overflow-x: hidden;
   width: 100%;
@@ -56,6 +59,7 @@ body {
   }
 }
 
+
 button {
   cursor: pointer;
   border: none;
@@ -63,6 +67,19 @@ button {
   padding: 0.5rem 1rem;
   font-weight: 500;
   transition: all 0.2s;
+}
+
+/* Accessibility Utils */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .btn-primary {

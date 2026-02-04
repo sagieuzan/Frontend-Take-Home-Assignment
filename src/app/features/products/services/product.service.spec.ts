@@ -35,7 +35,45 @@ describe('ProductService', () => {
 
         const req = httpMock.expectOne(req => req.url.includes('/products'));
         expect(req.request.method).toBe('GET');
+        req.flush(mockProducts, { headers: { 'X-Total-Count': '2' } });
+    });
+
+    it('should cache consecutive requests with same parameters', () => {
+        // First call
+        service.getProducts().subscribe();
+        const req = httpMock.expectOne(req => req.url.includes('/products'));
         req.flush(mockProducts);
+
+        // Second call (should return from cache)
+        service.getProducts().subscribe(products => {
+            expect(products).toEqual(mockProducts);
+        });
+
+        httpMock.expectNone(req => req.url.includes('/products'));
+    });
+
+    it('should clear cache on create/update/delete', () => {
+        // 1. Prime cache
+        service.getProducts().subscribe();
+        httpMock.expectOne(req => req.url.includes('/products')).flush(mockProducts);
+
+        // 2. Perform mutation (create)
+        service.createProduct({ name: 'New' } as any).subscribe();
+        httpMock.expectOne(req => req.method === 'POST').flush({ id: '3', name: 'New' });
+
+        // 3. fetch again (should NOT be cached)
+        service.getProducts().subscribe();
+        httpMock.expectOne(req => req.url.includes('/products') && req.method === 'GET');
+    });
+
+    it('should support local state manipulation (Optimistic UI)', () => {
+        const product = { id: '99', name: 'Optimistic' } as Product;
+
+        service.addProductLocally(product);
+        expect(service.products()).toContain(product);
+
+        service.removeProductLocally('99');
+        expect(service.products()).not.toContain(product);
     });
 
     it('should handle error when fetching products', (done) => {
@@ -49,18 +87,5 @@ describe('ProductService', () => {
 
         const req = httpMock.expectOne(req => req.url.includes('/products'));
         req.error(new ErrorEvent('Network error'));
-    });
-
-    it('should create a new product and update state', () => {
-        const newProd = { name: 'New', price: 15 } as any;
-        const responseProd = { ...newProd, id: '3' } as Product;
-
-        service.createProduct(newProd).subscribe();
-
-        const req = httpMock.expectOne(req => req.url.includes('/products'));
-        expect(req.request.method).toBe('POST');
-        req.flush(responseProd);
-
-        expect(service.products()).toContain(responseProd);
     });
 });

@@ -1,19 +1,21 @@
 @if (modalService.isOpen()) {
 <div class="modal-backdrop" (click)="modalService.cancel()">
     <div class="modal-content" [class]="'type-' + (modalService.options()?.type || 'default')"
-        (click)="$event.stopPropagation()">
+        (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="modal-title" cdkTrapFocus
+        [cdkTrapFocusAutoCapture]="true">
         <div class="modal-header">
-            <h2>{{ modalService.options()?.title }}</h2>
+            <h2 id="modal-title">{{ modalService.options()?.title }}</h2>
         </div>
         <div class="modal-body">
             <p>{{ modalService.options()?.message }}</p>
         </div>
         <div class="modal-footer">
-            <button class="btn-secondary" (click)="modalService.cancel()">
+            <button class="btn-secondary" (click)="modalService.cancel()" aria-label="Cancel and close modal">
                 {{ modalService.options()?.cancelText || 'Cancel' }}
             </button>
             <button [class]="modalService.options()?.type === 'danger' ? 'btn-danger' : 'btn-primary'"
-                (click)="modalService.confirm()">
+                (click)="modalService.confirm()"
+                [attr.aria-label]="modalService.options()?.confirmText || 'Confirm action'">
                 {{ modalService.options()?.confirmText || 'Confirm' }}
             </button>
         </div>

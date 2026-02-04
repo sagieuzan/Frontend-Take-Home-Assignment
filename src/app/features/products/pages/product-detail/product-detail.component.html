@@ -11,38 +11,53 @@
             <div class="form-grid">
                 <div class="form-group full-width">
                     <label for="name">Product Name *</label>
-                    <input type="text" id="name" formControlName="name" placeholder="Enter product name">
-                    <div class="error" *ngIf="isFieldInvalid('name')">Name is required (min 3 chars)</div>
+                    <input type="text" id="name" formControlName="name" placeholder="Enter product name"
+                        aria-required="true" [attr.aria-invalid]="isFieldInvalid('name')"
+                        [attr.aria-describedby]="isFieldInvalid('name') ? 'name-error' : null">
+                    <div id="name-error" class="error" *ngIf="isFieldInvalid('name')" role="alert">Name is required (min
+                        3 chars)</div>
                 </div>
 
                 <div class="form-group full-width">
                     <label for="description">Description *</label>
                     <textarea id="description" formControlName="description" rows="4"
-                        placeholder="Enter product description"></textarea>
-                    <div class="error" *ngIf="isFieldInvalid('description')">Description is required</div>
+                        placeholder="Enter product description" aria-required="true"
+                        [attr.aria-invalid]="isFieldInvalid('description')"
+                        [attr.aria-describedby]="isFieldInvalid('description') ? 'desc-error' : null"></textarea>
+                    <div id="desc-error" class="error" *ngIf="isFieldInvalid('description')" role="alert">Description is
+                        required</div>
                 </div>
 
                 <div class="form-group">
                     <label for="price">Price ($) *</label>
-                    <input type="number" id="price" formControlName="price" placeholder="0.00">
-                    <div class="error" *ngIf="isFieldInvalid('price')">Price must be greater than 0</div>
+                    <input type="number" id="price" formControlName="price" placeholder="0.00" aria-required="true"
+                        [attr.aria-invalid]="isFieldInvalid('price')"
+                        [attr.aria-describedby]="isFieldInvalid('price') ? 'price-error' : null">
+                    <div id="price-error" class="error" *ngIf="isFieldInvalid('price')" role="alert">Price must be
+                        greater than 0</div>
                 </div>
 
                 <div class="form-group">
                     <label for="category">Category *</label>
-                    <select id="category" formControlName="category">
+                    <select id="category" formControlName="category" aria-required="true"
+                        [attr.aria-invalid]="isFieldInvalid('category')"
+                        [attr.aria-describedby]="isFieldInvalid('category') ? 'cat-error' : null">
                         <option value="">Select Category</option>
                         @for (cat of categories; track cat) {
                         <option [value]="cat">{{ cat }}</option>
                         }
                     </select>
-                    <div class="error" *ngIf="isFieldInvalid('category')">Category is required</div>
+                    <div id="cat-error" class="error" *ngIf="isFieldInvalid('category')" role="alert">Category is
+                        required</div>
                 </div>
 
                 <div class="form-group">
                     <label for="stock">Stock Quantity *</label>
-                    <input type="number" id="stock" formControlName="stock" placeholder="0">
-                    <div class="error" *ngIf="isFieldInvalid('stock')">Stock cannot be negative</div>
+                    <input type="number" id="stock" formControlName="stock" placeholder="0" aria-required="true"
+                        [attr.aria-invalid]="isFieldInvalid('stock')"
+                        [attr.aria-describedby]="isFieldInvalid('stock') ? 'stock-error' : null">
+                    <div id="stock-error" class="error" *ngIf="isFieldInvalid('stock')" role="alert">Stock cannot be
+                        negative</div>
                 </div>
 
                 <div class="form-group">
@@ -53,9 +68,13 @@
             </div>
 
             <div class="form-actions">
-                <button type="button" class="btn-secondary" (click)="goBack()">Cancel</button>
-                <button type="button" class="btn-danger" *ngIf="isEditMode" (click)="onDelete()">Delete Product</button>
-                <button type="submit" class="btn-primary" [disabled]="saving">
+                <button type="button" class="btn-secondary" (click)="goBack()"
+                    aria-label="Cancel and go back">Cancel</button>
+                <button type="button" class="btn-danger" *ngIf="isEditMode" (click)="onDelete()"
+                    [attr.aria-label]="'Delete product ' + productForm.get('name')?.value">Delete Product</button>
+                <button type="submit" class="btn-primary"
+                    [disabled]="saving || (isEditMode && productForm.pristine) || productForm.invalid"
+                    [attr.aria-label]="isEditMode ? 'Update existing product' : 'Create new product'">
                     {{ saving ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product') }}
                 </button>
             </div>

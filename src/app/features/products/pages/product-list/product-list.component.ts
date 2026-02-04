@@ -58,7 +58,7 @@ export class ProductListComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  private updateUrl(params: any) {
+  private updateUrl(params: Partial<ProductFilters>) {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: params,

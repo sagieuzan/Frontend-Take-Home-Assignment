@@ -3,8 +3,10 @@ import { ProductDetailComponent } from './product-detail.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
+import { ProductService } from '../../services/product.service';
+import { Product } from '../../models/product.model';
 
 describe('ProductDetailComponent', () => {
     let component: ProductDetailComponent;
@@ -71,5 +73,25 @@ describe('ProductDetailComponent', () => {
             stock: 10
         });
         expect(component.productForm.valid).toBeTrue();
+    });
+
+    it('should initialize in edit mode when ID is provided', () => {
+        const mockProduct = { id: '1', name: 'Edit Me', price: 50, category: 'Electronics', stock: 10, description: 'Desc' } as Product;
+        const productService = TestBed.inject(ProductService);
+        spyOn(productService, 'getProductById').and.returnValue(of(mockProduct));
+
+        // Manually trigger initialization with ID
+        component.productId = '1';
+        component.isEditMode = true;
+        (component as any).loadProduct('1');
+
+        expect(component.isEditMode).toBeTrue();
+        expect(component.productForm.get('name')?.value).toBe('Edit Me');
+    });
+
+    it('should navigate back using location', () => {
+        const locationSpy = spyOn((component as any).location, 'back');
+        component.goBack();
+        expect(locationSpy).toHaveBeenCalled();
     });
 });

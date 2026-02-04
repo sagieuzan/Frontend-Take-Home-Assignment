@@ -1,4 +1,4 @@
-<div class="notification-container">
+<div class="notification-container" role="status" aria-live="polite">
     @for (n of notificationService.notifications(); track n) {
     <div class="notification" [class]="n.type">
         <span>{{ n.message }}</span>
