@@ -26,34 +26,36 @@ export class ProductService {
     // Computed signals
     readonly productCount = computed(() => this._products().length);
 
+    // Cache storage
+    private cache = new Map<string, { products: Product[], total: number }>();
+
     constructor() { }
 
     getProducts(filters: ProductFilters = {}): Observable<Product[]> {
+        const params = this.buildParams(filters);
+        const cacheKey = params.toString();
+
+        // 1. Check Cache
+        if (this.cache.has(cacheKey)) {
+            const cached = this.cache.get(cacheKey)!;
+            this._products.set(cached.products);
+            this._totalCount.set(cached.total);
+            return of(cached.products);
+        }
+
         this._loading.set(true);
         this._error.set(null);
 
-        let params = new HttpParams();
-
-        if (filters.search) params = params.set('q', filters.search);
-        if (filters.category) params = params.set('category', filters.category);
-        if (filters.minPrice) params = params.set('price_gte', filters.minPrice.toString());
-        if (filters.maxPrice) params = params.set('price_lte', filters.maxPrice.toString());
-
-        if (filters.sortBy) {
-            params = params.set('_sort', filters.sortBy);
-            params = params.set('_order', filters.sortOrder || 'asc');
-        }
-
-        const page = filters.page || 1;
-        const limit = filters.limit || 10;
-        params = params.set('_page', page.toString());
-        params = params.set('_limit', limit.toString());
-
         return this.http.get<Product[]>(this.apiUrl, { params, observe: 'response' }).pipe(
             tap(response => {
-                const total = response.headers.get('X-Total-Count');
-                this._totalCount.set(total ? parseInt(total, 10) : response.body?.length || 0);
-                this._products.set(response.body || []);
+                const total = parseInt(response.headers.get('X-Total-Count') || '0', 10) || response.body?.length || 0;
+                const products = response.body || [];
+
+                // 2. Save to Cache
+                this.cache.set(cacheKey, { products, total });
+
+                this._totalCount.set(total);
+                this._products.set(products);
             }),
             map(response => response.body || []),
             catchError(err => {
@@ -65,7 +67,32 @@ export class ProductService {
         );
     }
 
+    private buildParams(filters: ProductFilters): HttpParams {
+        let params = new HttpParams();
+        if (filters.search) params = params.set('q', filters.search);
+        if (filters.category) params = params.set('category', filters.category);
+        if (filters.minPrice) params = params.set('price_gte', filters.minPrice.toString());
+        if (filters.maxPrice) params = params.set('price_lte', filters.maxPrice.toString());
+        if (filters.sortBy) {
+            params = params.set('_sort', filters.sortBy);
+            params = params.set('_order', filters.sortOrder || 'asc');
+        }
+        const page = filters.page || 1;
+        const limit = filters.limit || 8;
+        params = params.set('_page', page.toString());
+        params = params.set('_limit', limit.toString());
+        return params;
+    }
+
+    private clearCache() {
+        this.cache.clear();
+    }
+
     getProductById(id: string): Observable<Product> {
+        // First check if product exists in current local state
+        const localProduct = this._products().find(p => p.id === id);
+        if (localProduct) return of(localProduct);
+
         this._loading.set(true);
         return this.http.get<Product>(`${this.apiUrl}/${id}`).pipe(
             catchError(err => {
@@ -77,6 +104,7 @@ export class ProductService {
     }
 
     createProduct(product: ProductCreate): Observable<Product> {
+        this.clearCache();
         const newProduct = {
             ...product,
             createdAt: new Date().toISOString(),
@@ -95,6 +123,7 @@ export class ProductService {
     }
 
     updateProduct(id: string, updates: ProductUpdate): Observable<Product> {
+        this.clearCache();
         const updatedData = {
             ...updates,
             updatedAt: new Date().toISOString()
@@ -114,6 +143,7 @@ export class ProductService {
     }
 
     deleteProduct(id: string): Observable<void> {
+        this.clearCache();
         return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
             tap(() => {
                 this._products.update(prev => prev.filter(p => p.id !== id));
