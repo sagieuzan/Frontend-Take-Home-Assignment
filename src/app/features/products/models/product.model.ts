@@ -6,8 +6,6 @@ export interface Product {
   category: ProductCategory;
   imageUrl?: string;
   stock: number;
-  rating?: number;
-  tags: string[];
   createdAt?: string;
   updatedAt?: string;
   isOptimistic?: boolean; // For Optimistic UI states

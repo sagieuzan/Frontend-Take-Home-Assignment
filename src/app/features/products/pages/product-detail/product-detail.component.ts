@@ -49,8 +49,7 @@ export class ProductDetailComponent implements OnInit {
       price: [null, [Validators.required, Validators.min(0.01)]],
       category: ['', [Validators.required]],
       stock: [0, [Validators.required, Validators.min(0)]],
-      imageUrl: [''],
-      rating: [0]
+      imageUrl: ['']
     });
   }
 

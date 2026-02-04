@@ -13,8 +13,7 @@ describe('ProductCardComponent', () => {
         description: 'Test Description',
         price: 100,
         category: ProductCategory.Electronics,
-        stock: 10,
-        tags: []
+        stock: 10
     };
 
     beforeEach(async () => {
