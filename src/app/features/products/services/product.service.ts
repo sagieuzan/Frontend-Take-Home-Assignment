@@ -13,11 +13,13 @@ export class ProductService {
 
     // Reactive State 
     private readonly _products = signal<Product[]>([]);
+    private readonly _totalCount = signal<number>(0);
     private readonly _loading = signal<boolean>(false);
     private readonly _error = signal<string | null>(null);
 
     // Publicly exposed readonly signals
     readonly products = this._products.asReadonly();
+    readonly totalCount = this._totalCount.asReadonly();
     readonly loading = this._loading.asReadonly();
     readonly error = this._error.asReadonly();
 
@@ -42,13 +44,18 @@ export class ProductService {
             params = params.set('_order', filters.sortOrder || 'asc');
         }
 
-        if (filters.page) {
-            params = params.set('_page', filters.page.toString());
-            params = params.set('_limit', filters.limit?.toString() || '10');
-        }
+        const page = filters.page || 1;
+        const limit = filters.limit || 10;
+        params = params.set('_page', page.toString());
+        params = params.set('_limit', limit.toString());
 
-        return this.http.get<Product[]>(this.apiUrl, { params }).pipe(
-            tap(products => this._products.set(products)),
+        return this.http.get<Product[]>(this.apiUrl, { params, observe: 'response' }).pipe(
+            tap(response => {
+                const total = response.headers.get('X-Total-Count');
+                this._totalCount.set(total ? parseInt(total, 10) : response.body?.length || 0);
+                this._products.set(response.body || []);
+            }),
+            map(response => response.body || []),
             catchError(err => {
                 const errMsg = 'Failed to load products. Please try again later.';
                 this._error.set(errMsg);
@@ -116,5 +123,14 @@ export class ProductService {
                 return throwError(() => new Error('Failed to delete product.'));
             })
         );
+    }
+
+    // Support for Optimistic UI
+    removeProductLocally(id: string) {
+        this._products.update(prev => prev.filter(p => p.id !== id));
+    }
+
+    addProductLocally(product: Product) {
+        this._products.update(prev => [product, ...prev]);
     }
 }

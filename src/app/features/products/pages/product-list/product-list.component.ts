@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { ProductFiltersComponent } from '../../components/product-filters/product-filters.component';
@@ -23,19 +24,60 @@ import { ProductFilters } from '../../models/product.model';
   styleUrl: './product-list.component.scss'
 })
 export class ProductListComponent implements OnInit {
-  readonly productService = inject(ProductService);
-  private currentFilters: ProductFilters = {};
+  private readonly productService = inject(ProductService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
+  currentFilters: ProductFilters = {};
+  currentPage = 1;
+  pageSize = 8;
 
   ngOnInit() {
-    this.loadProducts();
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = params['page'] ? parseInt(params['page'], 10) : 1;
+      this.currentFilters = {
+        search: params['search'] || '',
+        category: params['category'] || '',
+        sortBy: params['sortBy'] || 'createdAt',
+        sortOrder: params['sortOrder'] || 'desc'
+      };
+      this.loadProducts();
+    });
   }
 
   loadProducts() {
-    this.productService.getProducts(this.currentFilters).subscribe();
+    this.productService.getProducts({ ...this.currentFilters, page: this.currentPage, limit: this.pageSize }).subscribe();
   }
 
   onFiltersChanged(filters: ProductFilters) {
-    this.currentFilters = filters;
-    this.loadProducts();
+    this.updateUrl({ ...filters, page: 1 });
   }
+
+  onPageChange(page: number) {
+    this.updateUrl({ ...this.currentFilters, page });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  private updateUrl(params: any) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: params,
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.productService.totalCount() / this.pageSize);
+  }
+
+  get pages(): number[] {
+    const total = this.totalPages;
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  // Helpers for template access
+  get loading() { return this.productService.loading(); }
+  get error() { return this.productService.error(); }
+  get products() { return this.productService.products(); }
+  get productCount() { return this.productService.totalCount(); }
 }

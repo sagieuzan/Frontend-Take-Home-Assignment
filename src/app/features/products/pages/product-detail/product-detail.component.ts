@@ -94,20 +94,38 @@ export class ProductDetailComponent implements OnInit {
   }
 
   async onDelete() {
+    const productToDelete = this.productForm.value as Product;
+    if (!this.productId) return;
+
     const confirmed = await this.modalService.open({
       title: 'Delete Product',
-      message: 'Are you sure you want to delete this product? This action cannot be undone.',
+      message: `Are you sure you want to delete "${productToDelete.name}"? This action cannot be undone.`,
       confirmText: 'Delete',
       type: 'danger'
     });
 
-    if (confirmed && this.productId) {
-      this.productService.deleteProduct(this.productId).subscribe({
+    if (confirmed) {
+      // OPTIMISTIC UPDATE
+      const id = this.productId;
+      const backupProduct = { ...productToDelete, id }; // Backup for rollback
+
+      // 1. Remove from local state immediately
+      this.productService.removeProductLocally(id);
+
+      // 2. Navigate away immediately
+      this.router.navigate(['/products']);
+      this.notificationService.success('Deletion in progress...');
+
+      // 3. Perform background API call
+      this.productService.deleteProduct(id).subscribe({
         next: () => {
-          this.notificationService.success('Product deleted successfully');
-          this.router.navigate(['/products']);
+          this.notificationService.success(`Product "${backupProduct.name}" deleted successfully`);
         },
-        error: (err) => this.notificationService.error('Failed to delete product')
+        error: () => {
+          // ROLLBACK on failure
+          this.productService.addProductLocally(backupProduct);
+          this.notificationService.error(`Failed to delete "${backupProduct.name}". The item has been restored.`);
+        }
       });
     }
   }

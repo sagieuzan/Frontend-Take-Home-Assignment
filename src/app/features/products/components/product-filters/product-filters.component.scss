@@ -1,6 +1,7 @@
 .filters-card {
     padding: 1.5rem;
     margin-bottom: 2rem;
+    position: relative;
 }
 
 .filter-form {
@@ -39,8 +40,41 @@
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
 }
 
+.actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 1.5rem;
+}
+
+.btn-reset {
+    padding: 0.25rem 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover {
+        color: var(--danger);
+    }
+}
+
 @media (max-width: 640px) {
     .filter-form {
         grid-template-columns: 1fr;
+    }
+
+    .actions {
+        position: static;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: -0.5rem;
+        margin-bottom: 0.5rem;
     }
 }

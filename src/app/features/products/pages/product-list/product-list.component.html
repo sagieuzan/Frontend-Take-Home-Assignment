@@ -4,22 +4,22 @@
             <h1>Products</h1>
             <p class="subtitle">Manage and browse your catalog</p>
         </div>
-        <div class="stats" *ngIf="!productService.loading()">
-            {{ productService.productCount() }} products found
+        <div class="stats" *ngIf="!loading">
+            {{ productCount }} products found
         </div>
     </div>
 
-    <app-product-filters (filtersChanged)="onFiltersChanged($event)"></app-product-filters>
+    <app-product-filters [initialFilters]="currentFilters"
+        (filtersChanged)="onFiltersChanged($event)"></app-product-filters>
 
-    <app-loading-spinner *ngIf="productService.loading()"></app-loading-spinner>
+    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
-    <app-error-message *ngIf="productService.error() && !productService.loading()" [message]="productService.error()!"
-        (retry)="loadProducts()">
+    <app-error-message *ngIf="error && !loading" [message]="error!" (retry)="loadProducts()">
     </app-error-message>
 
-    <ng-container *ngIf="!productService.loading() && !productService.error()">
-        <div class="product-grid" *ngIf="productService.products().length > 0; else empty">
-            @for (product of productService.products(); track product.id) {
+    <ng-container *ngIf="!loading && !error">
+        <div class="product-grid" *ngIf="products.length > 0; else empty">
+            @for (product of products; track product.id) {
             <app-product-card [product]="product"></app-product-card>
             }
         </div>
@@ -28,4 +28,23 @@
     <ng-template #empty>
         <app-empty-state></app-empty-state>
     </ng-template>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1 && !loading && !error">
+        <button class="btn-page" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+            Previous
+        </button>
+
+        <div class="page-numbers">
+            @for (page of pages; track page) {
+            <button class="btn-page" [class.active]="page === currentPage" (click)="onPageChange(page)">
+                {{ page }}
+            </button>
+            }
+        </div>
+
+        <button class="btn-page" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+            Next
+        </button>
+    </div>
 </div>
