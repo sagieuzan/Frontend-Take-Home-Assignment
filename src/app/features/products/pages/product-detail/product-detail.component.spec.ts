@@ -1,9 +1,8 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ProductDetailComponent } from './product-detail.component';
+import { Location } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
@@ -16,8 +15,6 @@ describe('ProductDetailComponent', () => {
         await TestBed.configureTestingModule({
             imports: [
                 ReactiveFormsModule,
-                RouterTestingModule,
-                HttpClientTestingModule,
                 ProductDetailComponent // Standalone
             ],
             providers: [
@@ -83,14 +80,15 @@ describe('ProductDetailComponent', () => {
         // Manually trigger initialization with ID
         component.productId = '1';
         component.isEditMode = true;
-        (component as any).loadProduct('1');
+        (component as unknown as { loadProduct: (id: string) => void }).loadProduct('1');
 
         expect(component.isEditMode).toBeTrue();
         expect(component.productForm.get('name')?.value).toBe('Edit Me');
     });
 
     it('should navigate back using location', () => {
-        const locationSpy = spyOn((component as any).location, 'back');
+        const location = TestBed.inject(Location);
+        const locationSpy = spyOn(location, 'back');
         component.goBack();
         expect(locationSpy).toHaveBeenCalled();
     });

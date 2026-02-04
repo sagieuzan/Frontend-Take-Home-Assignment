@@ -66,8 +66,8 @@ describe('ProductListComponent', () => {
     });
 
     it('should calculate total pages correctly', () => {
-        // Set the signal value
-        (productService.totalCount as any).set(25);
+        const totalCountSignal = productService.totalCount as any;
+        totalCountSignal.set(25);
         component.pageSize = 8;
 
         expect(component.totalPages).toBe(4);

@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
@@ -13,7 +12,6 @@ import { ProductFilters } from '../../models/product.model';
   selector: 'app-product-list',
   standalone: true,
   imports: [
-    NgIf, NgFor, AsyncPipe,
     ProductCardComponent,
     ProductFiltersComponent,
     LoadingSpinnerComponent,

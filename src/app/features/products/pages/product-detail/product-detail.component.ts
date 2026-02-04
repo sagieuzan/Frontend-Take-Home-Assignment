@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { NgIf, NgFor, Location } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { Product, ProductCategory } from '../../models/product.model';
@@ -12,7 +12,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [NgIf, NgFor, ReactiveFormsModule, RouterLink, LoadingSpinnerComponent],
+  imports: [ReactiveFormsModule, LoadingSpinnerComponent],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss'
 })

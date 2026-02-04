@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ProductService } from './product.service';
-import { Product } from '../models/product.model';
+import { Product, ProductCreate } from '../models/product.model';
 
 describe('ProductService', () => {
     let service: ProductService;
@@ -58,7 +58,14 @@ describe('ProductService', () => {
         httpMock.expectOne(req => req.url.includes('/products')).flush(mockProducts);
 
         // 2. Perform mutation (create)
-        service.createProduct({ name: 'New' } as any).subscribe();
+        service.createProduct({
+            name: 'New',
+            description: 'description',
+            price: 10,
+            category: 'Other',
+            stock: 1,
+            imageUrl: ''
+        } as ProductCreate).subscribe();
         httpMock.expectOne(req => req.method === 'POST').flush({ id: '3', name: 'New' });
 
         // 3. fetch again (should NOT be cached)

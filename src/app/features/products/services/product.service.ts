@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap, finalize, BehaviorSubject, of, throwError } from 'rxjs';
+import { Observable, tap, finalize, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Product, ProductCreate, ProductUpdate, ProductFilters } from '../models/product.model';
 

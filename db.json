@@ -130,7 +130,7 @@
       "stock": 14,
       "rating": 4.4,
       "createdAt": "2024-01-15T10:00:00Z",
-      "updatedAt": "2024-01-15T10:00:00Z"
+      "updatedAt": "2026-02-04T18:47:38.257Z"
     },
     {
       "id": "16",
@@ -151,10 +151,10 @@
       "price": 42,
       "category": "Books",
       "imageUrl": "https://images.unsplash.com/photo-1589998059171-988d887df646?w=800&q=80",
-      "stock": 15,
+      "stock": 16,
       "rating": 4.9,
       "createdAt": "2024-01-19T10:00:00Z",
-      "updatedAt": "2024-01-19T10:00:00Z"
+      "updatedAt": "2026-02-04T18:45:15.504Z"
     },
     {
       "id": "20",
@@ -202,7 +202,7 @@
       "stock": 30,
       "rating": 4.8,
       "createdAt": "2024-01-23T10:00:00Z",
-      "updatedAt": "2024-01-23T10:00:00Z"
+      "updatedAt": "2026-02-04T18:54:24.205Z"
     },
     {
       "id": "25",

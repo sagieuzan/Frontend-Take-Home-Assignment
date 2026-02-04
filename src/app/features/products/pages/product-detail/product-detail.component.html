@@ -4,9 +4,12 @@
         <h1>{{ isEditMode ? 'Edit Product' : 'New Product' }}</h1>
     </div>
 
-    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+    @if (loading) {
+    <app-loading-spinner></app-loading-spinner>
+    }
 
-    <div class="form-card card" *ngIf="!loading">
+    @if (!loading) {
+    <div class="form-card card">
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
             <div class="form-grid">
                 <div class="form-group full-width">
@@ -14,8 +17,9 @@
                     <input type="text" id="name" formControlName="name" placeholder="Enter product name"
                         aria-required="true" [attr.aria-invalid]="isFieldInvalid('name')"
                         [attr.aria-describedby]="isFieldInvalid('name') ? 'name-error' : null">
-                    <div id="name-error" class="error" *ngIf="isFieldInvalid('name')" role="alert">Name is required (min
-                        3 chars)</div>
+                    @if (isFieldInvalid('name')) {
+                    <div id="name-error" class="error" role="alert">Name is required (min 3 chars)</div>
+                    }
                 </div>
 
                 <div class="form-group full-width">
@@ -24,8 +28,9 @@
                         placeholder="Enter product description" aria-required="true"
                         [attr.aria-invalid]="isFieldInvalid('description')"
                         [attr.aria-describedby]="isFieldInvalid('description') ? 'desc-error' : null"></textarea>
-                    <div id="desc-error" class="error" *ngIf="isFieldInvalid('description')" role="alert">Description is
-                        required</div>
+                    @if (isFieldInvalid('description')) {
+                    <div id="desc-error" class="error" role="alert">Description is required</div>
+                    }
                 </div>
 
                 <div class="form-group">
@@ -33,8 +38,9 @@
                     <input type="number" id="price" formControlName="price" placeholder="0.00" aria-required="true"
                         [attr.aria-invalid]="isFieldInvalid('price')"
                         [attr.aria-describedby]="isFieldInvalid('price') ? 'price-error' : null">
-                    <div id="price-error" class="error" *ngIf="isFieldInvalid('price')" role="alert">Price must be
-                        greater than 0</div>
+                    @if (isFieldInvalid('price')) {
+                    <div id="price-error" class="error" role="alert">Price must be greater than 0</div>
+                    }
                 </div>
 
                 <div class="form-group">
@@ -47,8 +53,9 @@
                         <option [value]="cat">{{ cat }}</option>
                         }
                     </select>
-                    <div id="cat-error" class="error" *ngIf="isFieldInvalid('category')" role="alert">Category is
-                        required</div>
+                    @if (isFieldInvalid('category')) {
+                    <div id="cat-error" class="error" role="alert">Category is required</div>
+                    }
                 </div>
 
                 <div class="form-group">
@@ -56,8 +63,9 @@
                     <input type="number" id="stock" formControlName="stock" placeholder="0" aria-required="true"
                         [attr.aria-invalid]="isFieldInvalid('stock')"
                         [attr.aria-describedby]="isFieldInvalid('stock') ? 'stock-error' : null">
-                    <div id="stock-error" class="error" *ngIf="isFieldInvalid('stock')" role="alert">Stock cannot be
-                        negative</div>
+                    @if (isFieldInvalid('stock')) {
+                    <div id="stock-error" class="error" role="alert">Stock cannot be negative</div>
+                    }
                 </div>
 
                 <div class="form-group">
@@ -70,8 +78,12 @@
             <div class="form-actions">
                 <button type="button" class="btn-secondary" (click)="goBack()"
                     aria-label="Cancel and go back">Cancel</button>
-                <button type="button" class="btn-danger" *ngIf="isEditMode" (click)="onDelete()"
+
+                @if (isEditMode) {
+                <button type="button" class="btn-danger" (click)="onDelete()"
                     [attr.aria-label]="'Delete product ' + productForm.get('name')?.value">Delete Product</button>
+                }
+
                 <button type="submit" class="btn-primary"
                     [disabled]="saving || (isEditMode && productForm.pristine) || productForm.invalid"
                     [attr.aria-label]="isEditMode ? 'Update existing product' : 'Create new product'">
@@ -80,4 +92,5 @@
             </div>
         </form>
     </div>
+    }
 </div>

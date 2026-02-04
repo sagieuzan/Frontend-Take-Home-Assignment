@@ -4,33 +4,38 @@
             <h1>Products</h1>
             <p class="subtitle">Manage and browse your catalog</p>
         </div>
-        <div class="stats" *ngIf="!loading">
+        @if (!loading) {
+        <div class="stats">
             {{ productCount }} products found
         </div>
+        }
     </div>
 
     <app-product-filters [initialFilters]="currentFilters"
         (filtersChanged)="onFiltersChanged($event)"></app-product-filters>
 
-    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+    @if (loading) {
+    <app-loading-spinner></app-loading-spinner>
+    }
 
-    <app-error-message *ngIf="error && !loading" [message]="error!" (retry)="loadProducts()">
+    @if (error && !loading) {
+    <app-error-message [message]="error!" (retry)="loadProducts()">
     </app-error-message>
+    }
 
-    <ng-container *ngIf="!loading && !error">
-        <div class="product-grid" *ngIf="products.length > 0; else empty">
-            @for (product of products; track product.id) {
-            <app-product-card [product]="product"></app-product-card>
-            }
-        </div>
-    </ng-container>
-
-    <ng-template #empty>
+    @if (!loading && !error) {
+    <div class="product-grid">
+        @for (product of products; track product.id) {
+        <app-product-card [product]="product"></app-product-card>
+        } @empty {
         <app-empty-state></app-empty-state>
-    </ng-template>
+        }
+    </div>
+    }
 
     <!-- Pagination -->
-    <div class="pagination" *ngIf="totalPages > 1 && !loading && !error">
+    @if (totalPages > 1 && !loading && !error) {
+    <div class="pagination">
         <button class="btn-page" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
             Previous
         </button>
@@ -47,4 +52,5 @@
             Next
         </button>
     </div>
+    }
 </div>
