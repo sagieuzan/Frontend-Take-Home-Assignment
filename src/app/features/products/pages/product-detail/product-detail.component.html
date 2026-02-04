@@ -84,8 +84,7 @@
                     [attr.aria-label]="'Delete product ' + productForm.get('name')?.value">Delete Product</button>
                 }
 
-                <button type="submit" class="btn-primary"
-                    [disabled]="saving || (isEditMode && productForm.pristine) || productForm.invalid"
+                <button type="submit" class="btn-primary" [disabled]="saving || (isEditMode && productForm.pristine)"
                     [attr.aria-label]="isEditMode ? 'Update existing product' : 'Create new product'">
                     {{ saving ? 'Saving...' : (isEditMode ? 'Update Product' : 'Create Product') }}
                 </button>
